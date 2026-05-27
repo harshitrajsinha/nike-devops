@@ -1,0 +1,42 @@
+services:
+  frontend:
+    image: nike
+    container_name: nike
+    build: 
+      context: .
+      dockerfile: docker/Dockerfile.unopt
+    environment:
+      DATABASE_URL: ${DATABASE_URL}
+      BETTER_AUTH_SECRET: ${BETTER_AUTH_SECRET}
+      BETTER_AUTH_URL: ${BETTER_AUTH_URL}
+
+    ports:
+      - "3000:3000"
+    networks:
+      - nike-net
+    depends_on:
+      database:
+        condition: service_healthy
+
+  database:
+    image: postgres:14.23-alpine
+    container_name: postgresdb
+    restart: always
+    networks:
+      - nike-net
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: mysecretpassword
+      POSTGRES_DB: nikedb
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U admin -d nikedb"]
+      timeout: 3s
+      retries: 3
+      start_period: 5s
+  
+networks:
+  nike-net:
+    name: nike-net
+    driver: bridge
