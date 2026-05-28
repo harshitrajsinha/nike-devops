@@ -6,7 +6,7 @@ services:
       context: .
       dockerfile: docker/Dockerfile.test
     environment:
-      DATABASE_URL: ${DATABASE_URL}
+      DATABASE_URL: "postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@$database:5432/${POSTGRES_DB}"
       BETTER_AUTH_SECRET: ${BETTER_AUTH_SECRET}
       BETTER_AUTH_URL: ${BETTER_AUTH_URL}
     ports:
@@ -29,7 +29,7 @@ services:
       context: .
       dockerfile: docker/Dockerfile.migrate
     environment:
-      DATABASE_URL: ${DATABASE_URL}
+      DATABASE_URL: "postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@$database:5432/${POSTGRES_DB}"
     networks:
       - nike-net
     restart: "no"
