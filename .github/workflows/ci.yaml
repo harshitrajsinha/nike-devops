@@ -95,7 +95,7 @@ jobs:
           skip-setup-trivy: true
 
   linting:
-    if: github.ref == 'refs/heads/dev'
+    if: github.ref == 'refs/heads/main'
     needs: [security-scan]
     runs-on: ubuntu-latest
     permissions:
@@ -119,7 +119,7 @@ jobs:
       - name: Super-Linter
         uses: super-linter/super-linter@v8.6.0
         with:
-          DEFAULT_BRANCH: 'dev'
+          DEFAULT_BRANCH: 'main'
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
@@ -131,6 +131,10 @@ jobs:
 
   #   permissions:
   #     contents: read
+    
+  #   env:
+  #     IMAGE_NAME: harshitrajsinha/nike
+  #     IMAGE_TAG: ${{ github.sha }}
 
   #   steps:
   #     - name: Checkout Repository
@@ -146,3 +150,21 @@ jobs:
       
   #     - name: Build app
   #       run: npm build
+      
+  #     - name: Docker Setup Docker
+  #       uses: docker/setup-docker-action@v5.2.0
+      
+  #     - name: Docker Login
+  #       uses: docker/login-action@v4.2.0
+  #       with:
+  #         username: ${{ vars.DOCKERHUB_USERNAME }}
+  #         password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+  #     - name: Build and push Docker images
+  #       uses: docker/build-push-action@v7.2.0
+  #       with:
+  #         context: .
+  #         file: docker/Dockerfile
+  #         push: false
+  #         load: true
+  #         tags: ${{env.IMAGE_NAME}}:${{env.IMAGE_TAG}}
