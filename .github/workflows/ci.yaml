@@ -77,7 +77,7 @@ jobs:
           args: >
             "-Dsonar.projectName=nike-devops"
             -Dsonar.projectKey=nike-devops
-            -Dsonar.sources=src/
+            -Dsonar.sources=src
             -Dsonar.verbose=true
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
