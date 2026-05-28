@@ -85,3 +85,6 @@ Frontend of the project interacts with Postgres database via Drizzle ORM. To loa
 **Solution-3 (Implemented)** - Create a separate migration service that uses the build stage image of frontend to run the migration for database and sucessfully exit rather than creating application build. The migration would have data persistance using docker volumes so that until and unless the host machine is not corrputed, data remains intact even if frontend container restarts.
 
 **Solution-4 (probably, Best)** - To opt for database as a service from cloud service providers like NeonDB or Supabase, run the migration commands during build stage. `But` we need to be careful that if the app re-deploys, the commands should not re-run and create duplicate migration on database.
+
+<br><br>
+![Deployment](https://raw.githubusercontent.com/harshitrajsinha/nike-devops/289d2cb189dda634a246cad4e409b86a5105274e/assets/Screenshot%202026-05-28%20185241.png)
