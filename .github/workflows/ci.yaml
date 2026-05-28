@@ -196,16 +196,26 @@ jobs:
       - name: Docker image scan using Trivy
         uses: aquasecurity/trivy-action@v0.36.0
         with:
-          image-ref: ${{env.IMAGE_NAME}}:${{env.IMAGE_TAG}}
-          scan-type: image
-          format: 'github'
-          output: 'dependency-results.sbom.json'
+          image-ref: ${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }}
+          format: 'table'
+          severity: 'HIGH,CRITICAL'
+          exit-code: '1'
           github-pat: ${{ secrets.GITHUB_TOKEN }}
-          severity: "MEDIUM,HIGH,CRITICAL"
-          scanners: "vuln"
+          skip-setup-trivy: true
 
+      # SBOM generation
+      - name: Generate SBOM
+        uses: aquasecurity/trivy-action@v0.36.0
+        with:
+          image-ref: ${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }}
+          format: 'cyclonedx'
+          output: 'docker-image.sbom.json'
+          skip-setup-trivy: true
       - name: Upload trivy report as a Github artifact
         uses: actions/upload-artifact@v4
         with:
           name: trivy-sbom-docker-image-report
-          path: 'dependency-results.sbom.json'
+          path: 'docker-image.sbom.json'
+      
+      - name: Push image to docker registry
+        run: docker push $IMAGE_NAME:$IMAGE_TAG
