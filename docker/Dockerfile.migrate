@@ -1,0 +1,14 @@
+FROM node:24.16.0-alpine3.22 AS builder
+
+WORKDIR /app
+
+COPY package.json package-lock.json ./
+
+RUN npm ci
+
+COPY . .
+
+COPY ./docker/migrate-script.sh .
+RUN chmod +x migrate-script.sh
+
+CMD ["./migrate-script.sh"]

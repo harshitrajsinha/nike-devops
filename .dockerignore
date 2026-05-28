@@ -7,4 +7,4 @@ README.md
 .devcontainer/
 static/
 docker/*
-!docker/start-script.sh
+!docker/migrate-script.sh

@@ -9,11 +9,32 @@ services:
       DATABASE_URL: ${DATABASE_URL}
       BETTER_AUTH_SECRET: ${BETTER_AUTH_SECRET}
       BETTER_AUTH_URL: ${BETTER_AUTH_URL}
-
     ports:
       - "3000:3000"
     networks:
       - nike-net
+    volumes:
+      - my-volume:/data
+    command: sh -c "mv /data/static/ > ./static/"
+    depends_on:
+      database:
+        condition: service_healthy
+      db_migration:
+        condition: service_completed_successfully
+  
+  db_migration:
+    image: nike-migrate
+    container_name: dbmigrate
+    build: 
+      context: .
+      dockerfile: docker/Dockerfile.migrate
+    environment:
+      DATABASE_URL: ${DATABASE_URL}
+    networks:
+      - nike-net
+    restart: "no"
+    volumes:
+      - my-volume:/data
     depends_on:
       database:
         condition: service_healthy
@@ -27,16 +48,20 @@ services:
     ports:
       - "5432:5432"
     environment:
-      POSTGRES_USER: admin
-      POSTGRES_PASSWORD: test
-      POSTGRES_DB: nikedb
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U admin -d nikedb"]
       timeout: 3s
       retries: 3
+      interval: 5s
       start_period: 5s
   
 networks:
   nike-net:
     name: nike-net
     driver: bridge
+
+volumes:
+  my-volume:     
