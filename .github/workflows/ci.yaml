@@ -95,7 +95,7 @@ jobs:
           skip-setup-trivy: true
 
   linting:
-    if: github-ref == 'refs/heads/dev'
+    if: github.ref == 'refs/heads/dev'
     needs: [security-scan]
     runs-on: ubuntu-latest
     permissions:
@@ -126,3 +126,23 @@ jobs:
   # unit-tests:
 
   # image-build-release:
+  #   needs: [security-scan]
+  #   runs-on: ubuntu-latest
+
+  #   permissions:
+  #     contents: read
+
+  #   steps:
+  #     - name: Checkout Repository
+  #       uses: actions/checkout@v6.0.2
+      
+  #     - name: Install dependencies
+  #       run: npm ci
+      
+  #     - name: Setup Node.js
+  #       uses: actions/setup-node@v6.4.0
+  #       with:
+  #         node-version: '22'
+      
+  #     - name: Build app
+  #       run: npm build
