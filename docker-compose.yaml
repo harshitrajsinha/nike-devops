@@ -4,7 +4,7 @@ services:
     container_name: nike
     build: 
       context: .
-      dockerfile: docker/Dockerfile.unopt
+      dockerfile: docker/Dockerfile.test
     environment:
       DATABASE_URL: ${DATABASE_URL}
       BETTER_AUTH_SECRET: ${BETTER_AUTH_SECRET}
@@ -28,7 +28,7 @@ services:
       - "5432:5432"
     environment:
       POSTGRES_USER: admin
-      POSTGRES_PASSWORD: mysecretpassword
+      POSTGRES_PASSWORD: test
       POSTGRES_DB: nikedb
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U admin -d nikedb"]

@@ -6,9 +6,10 @@ COPY package.json package-lock.json ./
 
 RUN npm ci
 
-COPY . .
+COPY ./docker/start-script.sh .
+RUN chmod +x start-script.sh
 
-RUN npm run db:generate
+COPY . .
 
 RUN npm run build
 
@@ -24,6 +25,13 @@ RUN apk add --no-cache libc6-compat
 COPY --from=builder /app/public/ ./public
 COPY --from=builder /app/.next/standalone ./
 COPY --from=builder /app/.next/static ./.next/static
+COPY --from=builder /app/next.config.ts ./next.config.ts
+COPY --from=builder /app/drizzle.config.ts ./drizzle.config.ts
+COPY --from=builder /app/src/lib/db/ ./src/lib/db/
+COPY --from=builder /app/tsconfig.json ./tsconfig.json
+COPY --from=builder /app/start-script.sh .
+
+RUN npm install drizzle-kit tsx 
 
 RUN chown -R nextjs:nodejs /app
 
@@ -31,4 +39,4 @@ USER nextjs
 
 EXPOSE 3000
 
-CMD ["node", "server.js"]
+CMD ["./start-script.sh"]

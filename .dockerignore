@@ -4,6 +4,7 @@ dist/
 .gitignore
 Dockerfile
 README.md
-docker/
 .devcontainer/
 static/
+docker/*
+!docker/start-script.sh
