@@ -201,7 +201,6 @@ jobs:
           severity: HIGH,CRITICAL
           exit-code: 1
           github-pat: ${{ secrets.GITHUB_TOKEN }}
-          skip-setup-trivy: true
 
       # SBOM generation
       - name: Generate SBOM for docker image
