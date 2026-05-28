@@ -8,4 +8,5 @@ README.md
 static/
 docker/*
 !docker/migrate-script.sh
+!docker/start-script.sh
 drizzle/

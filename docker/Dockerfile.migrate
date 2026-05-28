@@ -1,14 +1,19 @@
 FROM node:24.16.0-alpine3.22 AS builder
 
+RUN addgroup -g 1001 -S nodejs
+RUN adduser -S nextjs -u 1001
+
 WORKDIR /app
 
-COPY package.json package-lock.json ./
+COPY --chown=nextjs:nodejs  package.json package-lock.json ./
 
 RUN npm ci
 
-COPY . .
+COPY --chown=nextjs:nodejs . .
 
-COPY ./docker/migrate-script.sh .
+COPY --chown=nextjs:nodejs ./docker/migrate-script.sh .
 RUN chmod +x migrate-script.sh
+
+USER nextjs
 
 CMD ["./migrate-script.sh"]
