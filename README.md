@@ -72,3 +72,16 @@ Open [http://localhost:3000](http://localhost:3000) in your browser to view the 
 <hr>
 
 # <a name="devops-project">DevOpsification of Project</a>
+
+### Challenging part of dockerizing this project:
+
+Frontend of the project interacts with Postgres database via Drizzle ORM. To load data to the database, we need to execute to command before booting the application - `npm run db:push` to load tables to database and `npm run db:seed` to generate product images.<br><br>
+**Problem**: Nextjs projects require a `standalone` output configuration to shrink the build size. This configuration however, removes `drizzle-kit` package in the final build, required for running the above commands and on running these commands result in drizzle-kit not found error.
+
+**Solution-1** - Run database container preemptively. Before building the application, run the commands to load the required data to database. `But` this would mean managing database separately than through Docker compose.
+
+**Solution-2** - If to manage through Docker compose, install the dependency in the final stage. `But` this would bloat the final image size and would cost significant image build time every time we have to perform re-deployment.
+
+**Solution-3 (Implemented)** - Create a separate migration service that uses the build stage image of frontend to run the migration for database and sucessfully exit rather than creating application build. The migration would have data persistance using docker volumes so that until and unless the host machine is not corrputed, data remains intact even if frontend container restarts.
+
+**Solution-4 (probably, Best)** - To opt for database as a service from cloud service providers like NeonDB or Supabase, run the migration commands during build stage. `But` we need to be careful that if the app re-deploys, the commands should not re-run and create duplicate migration on database.

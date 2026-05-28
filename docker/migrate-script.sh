@@ -7,4 +7,4 @@ echo "Running pre-start commands..."
 npm run db:push
 npm run db:seed
 
-mv ./static/ /data
+cp -r ./static/ /data/static/
