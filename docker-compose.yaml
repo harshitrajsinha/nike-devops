@@ -15,7 +15,7 @@ services:
       - nike-net
     volumes:
       - my-volume:/data
-    command: sh -c "mv /data/static/ > ./static/"
+    command: sh -c "cp -r /data/static/ ./static/ && node server.js"
     depends_on:
       database:
         condition: service_healthy
