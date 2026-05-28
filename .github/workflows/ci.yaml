@@ -73,7 +73,6 @@ jobs:
       - name: 
         uses: SonarSource/sonarqube-scan-action@v8.1.0
         with:
-          projectBaseDir: src
           args: >
             "-Dsonar.projectName=nike-devops"
             -Dsonar.projectKey=nike-devops
