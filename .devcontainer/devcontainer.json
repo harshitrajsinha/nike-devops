@@ -1,4 +1,0 @@
-{
-  "name": "Stop manual npm install",
-  "updateContentCommand": "echo 'Skipping automatic npm install'"
-}
