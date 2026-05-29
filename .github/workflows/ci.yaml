@@ -133,6 +133,7 @@ jobs:
 
     permissions:
       contents: read
+      issues: write # for owasp zap to create issue ticket
     
     env:
       IMAGE_NAME: harshitrajsinha/nike
@@ -220,10 +221,12 @@ jobs:
       ################## This section is for DAST OWASP ZAP #############
       ## Could not run because image requires postgres
       # Start app
-      # - run: docker run -d -p 8080:8080 app:latest
+      # - name: Start app (for OWASP ZAP testing)
+      #   run: docker run -d -p 3000:3000 $IMAGE_NAME:$IMAGE_TAG
 
       # Wait for app
-      # - run: sleep 20
+      # - name: Wait for app (for OWASP ZAP testing)
+      #   run: sleep 20
 
       # Run ZAP
       #- name: OWASP ZAP Scan
